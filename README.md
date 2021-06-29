@@ -8,14 +8,7 @@ GitHub Actions are a way to make automated workflows that trigger when events oc
 
 See the documentation for the available actions:
 
-* [generate-news](generate-news)
-* [generate-sticker](generate-sticker)
-* [goodpractice](goodpractice)
-* [license-report](license-report)
-* [multiversion-docs](multiversion-docs)
-* [package-release](package-release)
-* [version-bump](version-bump)
-* [vulnerability-report](vulnerability-report)
+* [r-license-report](r-license-report)
 
 ## Usage
 
