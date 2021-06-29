@@ -1,3 +1,5 @@
+[![SuperLinter](https://github.com/insightsengineering/github-actions/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/github-actions/actions/workflows/lint.yaml)
+
 # R Package Github Actions
 
 This is a suite of GitHub Actions to make R package development more effective.
