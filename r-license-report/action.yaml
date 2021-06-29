@@ -1,0 +1,31 @@
+name: R Dependency License Report
+author: Insights Engineering
+description: |
+  A Github Action that generates a license report of an R package's dependencies for continuous compliance.
+inputs:
+  path:
+    description: Path to package's root
+    required: false
+    default: "."
+  regex:
+    description: Regex used for flagging packages with non-compliant licenses
+    required: false
+    default: ""
+  fail:
+    description: Fail with a non-zero exit code if one or more dependencies are flagged by the regex
+    required: false
+    default: true
+  mran_snapshot_date:
+    description: MRAN snapshot date (in the YYYY-MM-DD format) for package metadata retrieval. Defaults to current date
+    required: false
+    default: ""
+  bioc_release:
+    description: BioConductor release version for package metadata retrieval
+    required: false
+    default: release
+runs:
+  using: 'docker'
+  image: './Dockerfile'
+branding:
+  icon: 'life-buoy'  
+  color: 'green'

@@ -1,0 +1,35 @@
+---
+name: License report action test
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  aragog:
+    runs-on: ubuntu-latest
+    name: Test aragog
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: License report
+        uses: ./r-license-report
+        with:
+          path: ./tests/packages/aragog
+
+  buckbeak:
+    runs-on: ubuntu-latest
+    name: Test buckbeak
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: License report
+        uses: ./tests/packages/buckbeak
