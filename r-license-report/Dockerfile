@@ -1,8 +1,5 @@
 FROM rocker/tidyverse:4.1.0
 
-# Install the checkpoint package
-RUN R -e "install.packages(c('checkpoint'), repos='http://cran.us.r-project.org')"
-
 # Copy scripts
 COPY license-report.R /main.R
 COPY entrypoint.sh /entrypoint.sh
