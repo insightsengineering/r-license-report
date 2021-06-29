@@ -2,38 +2,16 @@
 
 set -x
 
-ARGS=""
-
+FAIL_ARG=""
 if [[ "${INPUT_FAIL}" == "true" || "${INPUT_FAIL}" == "1" ]]
 then {
-    ARGS="${ARGS} -f"
+    FAIL_ARG="-f"
 }
 fi
 
-if [[ -z "${INPUT_PATH}" ]]
-then {
-    ARGS="${ARGS} -p ."
-} else {
-    ARGS="${ARGS} -p ${INPUT_PATH}"
-}
-fi
-
-if [[ -z "${INPUT_REGEX}" ]]
-then {
-    ARGS="${ARGS} -r ${INPUT_REGEX}"
-}
-fi
-
-if [[ -z "${INPUT_MRAN_SNAPSHOT_DATE}" ]]
-then {
-    ARGS="${ARGS} -s ${INPUT_MRAN_SNAPSHOT_DATE}"
-}
-fi
-
-if [[ -z "${INPUT_BIOC_RELEASE}" ]]
-then {
-    ARGS="${ARGS} -b ${INPUT_BIOC_RELEASE}"
-}
-fi
-
-Rscript /main.R "${ARGS}"
+Rscript /main.R \
+    $FAIL_ARG \
+    -p "${INPUT_PATH:-"."}" \
+    -r "${INPUT_REGEX:-""}" \
+    -s "${INPUT_MRAN_SNAPSHOT_DATE:-$(date "+%Y-%m-%d")}" \
+    -b "${INPUT_BIOC_RELEASE}:-release"
