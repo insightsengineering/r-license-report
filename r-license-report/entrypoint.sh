@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -x
+
 ARGS=""
 
 if [[ "${INPUT_FAIL}" == "true" || "${INPUT_FAIL}" == "1" ]]
