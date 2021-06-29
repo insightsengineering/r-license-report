@@ -1,4 +1,5 @@
 [![SuperLinter](https://github.com/insightsengineering/github-actions/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/github-actions/actions/workflows/lint.yaml)
+[![Tests](https://github.com/insightsengineering/github-actions/actions/workflows/test-license-report.yaml/badge.svg)](https://github.com/insightsengineering/github-actions/actions/workflows/test-license-report.yaml)
 
 # R Package Github Actions
 
