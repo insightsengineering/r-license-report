@@ -25,5 +25,5 @@ jobs:
           VALIDATE_R: true
           VALIDATE_YAML: true
           VALIDATE_BASH_EXEC: true
-          VALIDATE_PYTHON_FLAKE8: true
+          VALIDATE_DOCKERFILE_HADOLINT: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

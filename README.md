@@ -1,24 +1,123 @@
-[![SuperLinter](https://github.com/insightsengineering/github-actions/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/github-actions/actions/workflows/lint.yaml)
-[![Tests](https://github.com/insightsengineering/github-actions/actions/workflows/test-license-report.yaml/badge.svg)](https://github.com/insightsengineering/github-actions/actions/workflows/test-license-report.yaml)
+<!-- BEGIN_ACTION_DOC -->
+# R Dependency License Report
 
-# R Package Github Actions
+### Description
+A Github Action that generates a license report of an R package's dependencies for continuous compliance.
 
-This is a suite of GitHub Actions to make R package development more effective.
+### Action Type
+Docker
 
-GitHub Actions are a way to make automated workflows that trigger when events occur on your GitHub repository, using a YAML file that lives in your repo. These actions can be used to easily perform routine tasks as part of your package development workflow.
+### Author
+Insights Engineering
 
-## Actions
+### Inputs
+* `path`:
 
-See the documentation for the available actions:
+  _Description_: Path to package's root
 
-* [r-license-report](r-license-report)
+  _Required_: `false`
 
-## Usage
+  _Default_: `.`
 
-These actions can be added as steps to your own workflow files. GitHub reads workflow files from `.github/workflows/` within your repository. See the [Github Actions workflow documentation](https://docs.github.com/en/actions/learn-github-actions#about-workflows) for details on writing workflows.
+* `regex`:
 
-Here are some examples of how these actions can be used in workflows.
+  _Description_: Regex used for flagging packages with non-compliant licenses
 
-## License
+  _Required_: `false`
 
-The scripts and documentation in this project are released under the [MIT License](LICENSE).
+  _Default_: `""`
+
+* `fail`:
+
+  _Description_: Fail with a non-zero exit code if one or more dependencies are flagged by the regex
+
+  _Required_: `false`
+
+  _Default_: `True`
+
+* `mran_snapshot_date`:
+
+  _Description_: MRAN snapshot date (in the YYYY-MM-DD format) for package metadata retrieval. Defaults to current date
+
+  _Required_: `false`
+
+  _Default_: `""`
+
+* `bioc_release`:
+
+  _Description_: BioConductor release version for package metadata retrieval
+
+  _Required_: `false`
+
+  _Default_: `release`
+
+### Outputs
+None
+<!-- END_ACTION_DOC -->
+
+## How to use
+
+To use this GitHub Action you will need to complete the following:
+
+* Create a new file in your repository called `.github/workflows/r-license-report.yml`
+* Copy the quickstart workflow from below into that new file, no extra configuration required
+* Commit that file to a new branch
+* Open up a pull request and observe the action working
+* Review the output of the action as needed
+
+### Quickstart
+
+In your repository you should have a `.github/workflows/r-license-report.yml` folder with GitHub Action similar to below:
+
+```yaml
+---
+name: License Report
+
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  license-report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: License Report
+        uses: insightsengineering/r-license-report@main
+```
+
+### Complete example
+
+The following workflow is a complete example that highlights the available options in this Action:
+
+```yaml
+---
+name: License Compliance Check
+
+on:
+  push:
+    branches-ignore: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  license-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: License Report
+        uses: insightsengineering/r-license-report@main
+        with:
+          # R package root path, in case your R package is within a subdirectory of the repo
+          path: "."
+          # A regular expression that can be used for matching and flagging non-compliant licenses
+          regex: "^GPL.*"
+          # Fail the action if 1 or more matching non-compliant licenses are found
+          fail: true
+          # Select an MRAN snapshot date for CRAN dependency metadata retrieval
+          mran_snapshot_date: "2021-06-28"
+          # Select a Bioconductor release version for BioC dependency metadata retrieval
+          bioc_release: "3.12"
+```
