@@ -10,6 +10,8 @@ fi
 
 if [[ -z "${INPUT_PATH}" ]]
 then {
+    ARGS="${ARGS} -p ."
+} else {
     ARGS="${ARGS} -p ${INPUT_PATH}"
 }
 fi
