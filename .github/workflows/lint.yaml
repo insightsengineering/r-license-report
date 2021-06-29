@@ -24,7 +24,6 @@ jobs:
           DEFAULT_BRANCH: main
           VALIDATE_R: true
           VALIDATE_YAML: true
-          VALIDATE_BASH: true
           VALIDATE_BASH_EXEC: true
           VALIDATE_PYTHON_FLAKE8: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
