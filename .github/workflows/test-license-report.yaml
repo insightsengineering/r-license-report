@@ -32,7 +32,7 @@ jobs:
         uses: ./r-license-report
         with:
           path: ./tests/packages/buckbeak
-          regex: "GPL.*"
+          regex: "AGPL.*"
           fail: true
           mran_snapshot_date: "2021-01-01"
           bioc_release: "3.13"
