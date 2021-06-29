@@ -15,8 +15,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: License report
-        uses: ./r-license-report
+      - name: License report for Aragog
+        uses: ./
         with:
           path: ./tests/packages/aragog
 
@@ -28,8 +28,8 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
 
-      - name: License report
-        uses: ./r-license-report
+      - name: License report for Buckbeak
+        uses: ./
         with:
           path: ./tests/packages/buckbeak
           regex: "AGPL.*"
