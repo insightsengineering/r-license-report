@@ -2,9 +2,6 @@
 name: SuperLinter
 
 on:
-  push:
-    branches-ignore:
-      - main
   pull_request:
     branches:
       - main
@@ -16,11 +13,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - name: Lint Code Base
-        uses: github/super-linter@slim-v4
+        uses: docker://ghcr.io/github/super-linter:slim-v4
         env:
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: main
@@ -29,4 +24,5 @@ jobs:
           VALIDATE_MARKDOWN: true
           VALIDATE_BASH: true
           VALIDATE_BASH_EXEC: true
+          VALIDATE_PYTHON_FLAKE8: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
