@@ -1,3 +1,6 @@
+[![SuperLinter](https://github.com/insightsengineering/r-license-report/actions/workflows/lint.yaml/badge.svg)](https://github.com/insightsengineering/r-license-report/actions/workflows/lint.yaml)
+[![License report action test](https://github.com/insightsengineering/r-license-report/actions/workflows/test-license-report.yaml/badge.svg)](https://github.com/insightsengineering/r-license-report/actions/workflows/test-license-report.yaml)
+
 <!-- BEGIN_ACTION_DOC -->
 # R Dependency License Report
 
