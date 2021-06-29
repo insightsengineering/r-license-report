@@ -10,3 +10,4 @@ Type: Package
 Encoding: UTF-8
 RoxygenNote: 7.0.2
 Suggests: testthat
+Depends: graph

@@ -9,6 +9,6 @@ Maintainer: Insights Engineering <ie@example.com>
 License: GPL-3
 Type: Package
 Encoding: UTF-8
-Depends: aragog
+Depends: aragog, dplyr
 Suggests: testthat
 RoxygenNote: 7.0.2
