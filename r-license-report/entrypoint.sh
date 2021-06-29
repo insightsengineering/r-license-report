@@ -9,9 +9,16 @@ then {
 }
 fi
 
+REGEX_ARG=""
+if [[ "${INPUT_REGEX}" != "" ]]
+then {
+    REGEX_ARG="-r ${INPUT_REGEX}"
+}
+fi
+
 Rscript /main.R \
     $FAIL_ARG \
     -p "${INPUT_PATH:-"."}" \
-    -r "${INPUT_REGEX:-\"^$\"}" \
+    "$REGEX_ARG" \
     -s "${INPUT_MRAN_SNAPSHOT_DATE:-$(date "+%Y-%m-%d")}" \
     -b "${INPUT_BIOC_RELEASE}"
