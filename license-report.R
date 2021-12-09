@@ -105,8 +105,9 @@ get_licenses <- function(dir = ".",
 
   known_licences <- rbind(avail_pkgs, core_packages, bioc_pkgs)
   unknown_deps <- all_deps[
-    !(all_deps %in% known_licences$Package || all_deps$Package == "R")
+    !(all_deps %in% known_licences$Package)
   ]
+  unknown_deps <- unknown_deps[!(unknown_deps == "R")]
 
   unknown_licenses <- data.frame(
     Package = unknown_deps,
