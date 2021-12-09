@@ -6,7 +6,7 @@ inputs:
   path:
     description: Path to package's root
     required: false
-    default: "."
+    default: .
   regex:
     description: Regex used for flagging packages with non-compliant licenses
     required: false
@@ -15,8 +15,8 @@ inputs:
     description: Fail with a non-zero exit code if one or more dependencies are flagged by the regex
     required: false
     default: true
-  mran_snapshot_date:
-    description: MRAN snapshot date (in the YYYY-MM-DD format) for package metadata retrieval. Defaults to current date
+  rspm_snapshot_date:
+    description: RSPM snapshot date (in the YYYY-MM-DD format) for package metadata retrieval. Defaults to current date
     required: false
     default: ""
   bioc_release:

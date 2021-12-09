@@ -1,0 +1,5 @@
+reference:
+  - title: Teal Core Functions
+    desc:  These are the main functions needed to build a teal app.
+    contents:
+    - init

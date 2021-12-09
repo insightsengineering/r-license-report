@@ -16,7 +16,7 @@ fi
 
 Rscript /main.R \
     $FAIL_ARG \
-    -p "${INPUT_PATH:-"."}" \
+    -p "${INPUT_PATH:-.}" \
     ${REGEX_ARG} \
-    -s "${INPUT_MRAN_SNAPSHOT_DATE:-$(date "+%Y-%m-%d")}" \
+    -s "${INPUT_RSPM_SNAPSHOT_DATE:-$(date "+%Y-%m-%d")}" \
     -b "${INPUT_BIOC_RELEASE}"

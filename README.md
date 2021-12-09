@@ -38,9 +38,9 @@ Insights Engineering
 
   _Default_: `True`
 
-* `mran_snapshot_date`:
+* `rspm_snapshot_date`:
 
-  _Description_: MRAN snapshot date (in the YYYY-MM-DD format) for package metadata retrieval. Defaults to current date
+  _Description_: RSPM snapshot date (in the YYYY-MM-DD format) for package metadata retrieval. Defaults to current date
 
   _Required_: `false`
 
@@ -119,8 +119,8 @@ jobs:
           regex: "^GPL.*"
           # Fail the action if 1 or more matching non-compliant licenses are found
           fail: true
-          # Select an MRAN snapshot date for CRAN dependency metadata retrieval
-          mran_snapshot_date: "2021-06-28"
+          # Select an RSPM snapshot date for CRAN dependency metadata retrieval
+          rspm_snapshot_date: "2021-06-28"
           # Select a Bioconductor release version for BioC dependency metadata retrieval
-          bioc_release: "3.12"
+          bioc_release: "3.14"
 ```
