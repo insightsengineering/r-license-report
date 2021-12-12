@@ -66,7 +66,7 @@ Insights Engineering
 None
 <!-- END_ACTION_DOC -->
 
-## How to use
+## Usage
 
 To use this GitHub Action you will need to complete the following:
 
@@ -142,4 +142,26 @@ jobs:
         with:
           name: license-report.pdf
           path: license-report.pdf
+```
+
+## Standalone Usage
+
+The underlying script used in this action can also be used as a standalone script, and can be used outside of this action (eg. in other CI/CD tools). Simply:
+
+- Download the script
+
+```bash
+wget https://raw.githubusercontent.com/insightsengineering/r-license-report/main/license-report.R
+```
+
+- Set execute permissions
+
+```bash
+chmod +x license-report.R
+```
+
+- Run the script
+
+```bash
+./license-report.R --help
 ```
