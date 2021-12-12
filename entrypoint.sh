@@ -26,7 +26,7 @@ Rscript /main.R \
 
 # Convert to HTML, if requested
 TERMINAL_TO_HTML_VERSION="3.6.1"
-if [[ "${INPUT_OUTPUT_TYPE}" == "html" ]]
+if [[ "${INPUT_AS_HTML}" == "true" || "${INPUT_AS_HTML}" == "1" ]]
 then {
     echo "⏬ Downloading terminal-to-html"
     wget -q \
@@ -36,14 +36,5 @@ then {
     echo "📄 Saving output as HTML"
     ./t2html --preview < output.raw > license-report.html
     echo "💾 HTML report saved at: $(pwd)/license-report.html"
-}
-fi
-
-# Convert to PDF, if requested
-if [[ "${INPUT_OUTPUT_TYPE}" == "pdf" ]]
-then {
-    echo "📄 Saving output as PDF"
-    pandoc output.raw -o license-report.pdf
-    echo "💾 PDF report saved at: $(pwd)/license-report.pdf"
 }
 fi

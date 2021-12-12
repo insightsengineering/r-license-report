@@ -54,13 +54,13 @@ Insights Engineering
 
   _Default_: `release`
 
-* `output_type`:
+* `as_html`:
 
-  _Description_: Whether you also want the report as a `pdf`, or an `html` file
+  _Description_: Whether you also want the report as an `html` file
 
   _Required_: `false`
 
-  _Default_: `""`
+  _Default_: `false`
 
 ### Outputs
 None
@@ -134,8 +134,8 @@ jobs:
           rspm_snapshot_date: "2021-12-12"
           # Select a Bioconductor release version for BioC dependency metadata retrieval
           bioc_release: "3.14"
-          # Whether you also want the report as a `pdf`, or an `html` file
-          output_type: "pdf"
+          # Whether you also want the report as an `html` file
+          as_html: true
 
       - name: Upload PDF Report
         uses: actions/upload-artifact@v2

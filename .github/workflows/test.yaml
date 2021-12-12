@@ -24,14 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        output_type: ["pdf", "html"]
-    name: Test buckbeak (${{ matrix.output_type }}) 🧪
+        as_html: [true, false]
+    name: Test buckbeak (With HTML = ${{ matrix.as_html }}) 🧪
 
     steps:
       - name: Checkout repo 🛎
         uses: actions/checkout@v2
 
-      - name: License report (${{ matrix.output_type }}) for Buckbeak 🦄
+      - name: License report for Buckbeak (With HTML = ${{ matrix.as_html }}) 🦄
         uses: ./
         with:
           path: ./fixtures/packages/buckbeak
@@ -39,10 +39,11 @@ jobs:
           fail: true
           rspm_snapshot_date: "2021-12-12"
           bioc_release: "3.14"
-          output_type: ${{ matrix.output_type }}
+          as_html: ${{ matrix.as_html }}
 
-      - name: Upload ${{ matrix.output_type }} report ⤴
+      - name: Upload report ⤴
+        if: ${{ matrix.as_html }}
         uses: actions/upload-artifact@v2
         with:
-          name: "license-report.${{ matrix.output_type }}"
-          path: "license-report.${{ matrix.output_type }}"
+          name: license-report.html
+          path: license-report.html
