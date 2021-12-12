@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -ex
+set -e
 
 FAIL_ARG=""
 if [[ "${INPUT_FAIL}" == "true" || "${INPUT_FAIL}" == "1" ]]
@@ -26,7 +26,7 @@ Rscript /main.R \
 
 # Convert to HTML, if requested
 TERMINAL_TO_HTML_VERSION="3.6.1"
-if [[ "${INTPUT_OUTPUT_TYPE}" == "html" ]]
+if [[ "${INPUT_OUTPUT_TYPE}" == "html" ]]
 then {
     echo "⏬ Downloading terminal-to-html"
     wget -q \
@@ -40,7 +40,7 @@ then {
 fi
 
 # Convert to PDF, if requested
-if [[ "${INTPUT_OUTPUT_TYPE}" == "pdf" ]]
+if [[ "${INPUT_OUTPUT_TYPE}" == "pdf" ]]
 then {
     echo "📄 Saving output as PDF"
     pandoc output.raw -o license-report.pdf
