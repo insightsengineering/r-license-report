@@ -155,14 +155,14 @@ main <- function() {
       bioc_release = args$b
     )
   cli_alert("Analyzing license information...")
+  cli_h1("License Report")
   # Set fail counter
   fail_counter <- 0
   # Loop through deps
-  ## TODO: Export report as CSV, XLSX, PDF
   for (d in 1:nrow(deps)) {
     # Package name and version
-    pkg_name <- deps[d, "Package"]  # nolint
-    pkg_version <- deps[d, "Version"]  # nolint
+    pkg_name <- deps[d, "Package"] # nolint
+    pkg_version <- deps[d, "Version"] # nolint
     # Get license
     license <- deps[d, "License"]
     # Flag if regex is matched, otherwise do not
@@ -173,6 +173,11 @@ main <- function() {
       cli_alert_info(glue("{pkg_name} | {pkg_version} | {license}"))
     }
   }
+  # Print summary
+  cli_h1("License Summary")
+  summary_table <- as.data.frame(table(deps$License))
+  summary_table <- setNames(summary_table, c("License", "Count"))
+  print.data.frame(summary_table, row.names = FALSE)
   # Force fail if set
   if (args$f) {
     if (fail_counter > 0) {

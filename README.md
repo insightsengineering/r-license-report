@@ -54,6 +54,14 @@ Insights Engineering
 
   _Default_: `release`
 
+* `output_type`:
+
+  _Description_: Whether you also want the report as a `pdf`, or an `html` file
+
+  _Required_: `false`
+
+  _Default_: `""`
+
 ### Outputs
 None
 <!-- END_ACTION_DOC -->
@@ -86,9 +94,10 @@ jobs:
   license-report:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repo
+        uses: actions/checkout@v2
       - name: License Report
-        uses: insightsengineering/r-license-report@main
+        uses: insightsengineering/r-license-report@v1
 ```
 
 ### Complete example
@@ -109,18 +118,28 @@ jobs:
   license-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: License Report
-        uses: insightsengineering/r-license-report@main
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Generate License Report
+        uses: insightsengineering/r-license-report@v1
         with:
           # R package root path, in case your R package is within a subdirectory of the repo
           path: "."
           # A regular expression that can be used for matching and flagging non-compliant licenses
-          regex: "^GPL.*"
+          regex: "^AGPL.*"
           # Fail the action if 1 or more matching non-compliant licenses are found
           fail: true
           # Select an RSPM snapshot date for CRAN dependency metadata retrieval
-          rspm_snapshot_date: "2021-06-28"
+          rspm_snapshot_date: "2021-12-12"
           # Select a Bioconductor release version for BioC dependency metadata retrieval
           bioc_release: "3.14"
+          # Whether you also want the report as a `pdf`, or an `html` file
+          output_type: "pdf"
+
+      - name: Upload PDF Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: license-report.pdf
+          path: license-report.pdf
 ```

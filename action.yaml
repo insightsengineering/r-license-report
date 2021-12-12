@@ -23,6 +23,10 @@ inputs:
     description: BioConductor release version for package metadata retrieval
     required: false
     default: release
+  output_type:
+    description: Whether you also want the report as a `pdf`, or an `html` file
+    required: false
+    default: ""
 runs:
   using: 'docker'
   image: './Dockerfile'
