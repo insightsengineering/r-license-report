@@ -22,16 +22,16 @@ jobs:
 
   buckbeak:
     runs-on: ubuntu-latest
-    name: Test buckbeak 🧪
     strategy:
       matrix:
         output_type: ["pdf", "html"]
+    name: Test buckbeak (${{ matrix.output_type }}) 🧪
 
     steps:
       - name: Checkout repo 🛎
         uses: actions/checkout@v2
 
-      - name: License report for Buckbeak 🦄
+      - name: License report (${{ matrix.output_type }}) for Buckbeak 🦄
         uses: ./
         with:
           path: ./fixtures/packages/buckbeak
@@ -41,7 +41,7 @@ jobs:
           bioc_release: "3.14"
           output_type: ${{ matrix.output_type }}
 
-      - name: Upload reports ⤴
+      - name: Upload ${{ matrix.output_type }} report ⤴
         uses: actions/upload-artifact@v2
         with:
           name: "license-report.${{ matrix.output_type }}"
