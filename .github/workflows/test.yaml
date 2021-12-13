@@ -1,0 +1,49 @@
+---
+name: License report action test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  aragog:
+    runs-on: ubuntu-latest
+    name: Test aragog 🧪
+
+    steps:
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v2
+
+      - name: License report for Aragog 🕷
+        uses: ./
+        with:
+          path: ./fixtures/packages/aragog
+
+  buckbeak:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        as_html: [true, false]
+    name: Test buckbeak (With HTML = ${{ matrix.as_html }}) 🧪
+
+    steps:
+      - name: Checkout repo 🛎
+        uses: actions/checkout@v2
+
+      - name: License report for Buckbeak (With HTML = ${{ matrix.as_html }}) 🦄
+        uses: ./
+        with:
+          path: ./fixtures/packages/buckbeak
+          regex: "AGPL.*"
+          fail: true
+          rspm_snapshot_date: "2021-12-12"
+          bioc_release: "3.14"
+          as_html: ${{ matrix.as_html }}
+
+      - name: Upload report ⤴
+        if: ${{ matrix.as_html }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: license-report.html
+          path: license-report.html

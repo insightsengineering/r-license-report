@@ -1,4 +1,4 @@
-FROM rocker/tidyverse:4.1.0
+FROM rocker/tidyverse:4.1.2
 
 # Copy scripts
 COPY license-report.R /main.R

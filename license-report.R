@@ -35,8 +35,9 @@ clean_description_field <- function(field) {
 ## Gets direct dependencies for package
 pkg_deps <- function(pkg) {
   dep <- package_dependencies(pkg,
-                              which = c("Depends", "Imports", "LinkingTo"),
-                              recursive = TRUE)
+    which = c("Depends", "Imports", "LinkingTo"),
+    recursive = TRUE
+  )
   dep <- unlist(dep)
   return(unique(c(pkg, dep)))
 }
@@ -45,12 +46,12 @@ pkg_deps <- function(pkg) {
 ## TODO: Add support for renv
 get_licenses <- function(dir = ".",
                          fields = c("Depends", "Imports"),
-                         snapshot = format(Sys.time(), '%Y-%m-%d'),
+                         snapshot = format(Sys.time(), "%Y-%m-%d"),
                          bioc_release = "release") {
   # Set values
   fields_to_read <- c("Package", "Version", "License")
-  mran_url <-
-    glue("https://mran.microsoft.com/snapshot/{snapshot}/src/contrib")
+  rspm_url <-
+    glue("https://packagemanager.rstudio.com/cran/{snapshot}/src/contrib")
   bioc_home <-
     glue("https://www.bioconductor.org/packages/{bioc_release}/")
   bioc_packages_path <- "/src/contrib/PACKAGES"
@@ -64,26 +65,30 @@ get_licenses <- function(dir = ".",
   pkgs <- purrr::map(out, clean_description_field)
   all_deps <- unlist(purrr::map(pkgs, pkg_deps))
   all_deps <- sort(unique(all_deps))
-  
+
   if (is.null(all_deps)) {
-    cli_alert_info(glue("No dependencies found in package's {toString(fields)}"))
+    cli_alert_info(
+      glue("No dependencies found in package's {toString(fields)}")
+    )
     quit(status = 0)
   }
-  
-  # Packages versions and licenses for a given MRAN snapshot
-  avail_pkgs <- available.packages(contrib_url = mran_url)
+
+  # Packages versions and licenses for a given RSPM snapshot
+  avail_pkgs <- available.packages(contrib_url = rspm_url)
   avail_pkgs <-
     avail_pkgs[rownames(avail_pkgs) %in% all_deps, fields_to_read]
-  
+
   # Packages licenses and versions from R core
   installed_pkgs <- installed.packages()
   full_r_version <-
     paste(R.Version()$major, R.Version()$minor, sep = ".")
   core_packages <-
-    installed_pkgs[installed_pkgs[, "License"] == paste0("Part of R ", full_r_version), ]
+    installed_pkgs[installed_pkgs[, "License"] == paste0(
+      "Part of R ", full_r_version
+    ), ]
   core_packages <-
     core_packages[rownames(core_packages) %in% all_deps, fields_to_read]
-  
+
   # Packages versions and licenses from BioC
   cache_dir <- tempdir()
   bioc_metadata <- data.frame()
@@ -97,19 +102,23 @@ get_licenses <- function(dir = ".",
   }
   bioc_pkgs <-
     bioc_metadata[bioc_metadata$Package %in% all_deps, fields_to_read]
-  
+
   known_licences <- rbind(avail_pkgs, core_packages, bioc_pkgs)
-  unknown_deps <- all_deps[!(all_deps %in% known_licences$Package)]
-  
+  unknown_deps <- all_deps[
+    !(all_deps %in% known_licences$Package)
+  ]
+  unknown_deps <- unknown_deps[!(unknown_deps == "R")]
+
   unknown_licenses <- data.frame(
-    Package  = unknown_deps,
+    Package = unknown_deps,
     Version = rep(NA, length(unknown_deps)),
     License = rep("Package not in BioC/CRAN", length(unknown_deps))
   )
-  
+
   return(rbind(known_licences, unknown_licenses))
 }
 
+# nolint start
 parse_arguments <- function() {
   'License Report.
 
@@ -119,14 +128,15 @@ Usage:
 
 Options:
   -r regex     If a license matches this regular expression, it will be flagged. [default: ""]
-  -p path      Path to directory containing the DESCRIPTION file. [default: "."]
+  -p path      Path to directory containing the DESCRIPTION file. [default: .]
   -f           Yield a non-zero exit status for any flagged licenses that match the regular expression. [default: FALSE]
-  -s snapshot  MRAN snapshot date for package metadata retrieval. Format: YYYY-MM-DD. Defaults to current date. [default: ""]
+  -s snapshot  RSPM snapshot date for package metadata retrieval. Format: YYYY-MM-DD. Defaults to current date. [default: ""]
   -b release   BioConductor release version for package metadata retrieval. [default: release]
 ' -> doc
-  
+
   return(docopt(doc))
 }
+# nolint end
 
 ## Get licenses for all dependencies
 main <- function() {
@@ -134,33 +144,40 @@ main <- function() {
   args <- parse_arguments()
   # Set snapshot
   if (args$s == "") {
-    args$s <- format(Sys.time(), '%Y-%m-%d')
+    args$s <- format(Sys.time(), "%Y-%m-%d")
   }
   # Fetch deps
   cli_alert("Gathering license information for dependencies...")
   deps <-
-    get_licenses(dir = args$p,
-                 snapshot = args$s,
-                 bioc_release = args$b)
+    get_licenses(
+      dir = args$p,
+      snapshot = args$s,
+      bioc_release = args$b
+    )
   cli_alert("Analyzing license information...")
+  cli_h1("License Report")
   # Set fail counter
   fail_counter <- 0
   # Loop through deps
-  ## TODO: Export report as CSV, XLSX, PDF
   for (d in 1:nrow(deps)) {
     # Package name and version
-    pkg_name <- deps[d, "Package"]
-    pkg_version <- deps[d, "Version"]
+    pkg_name <- deps[d, "Package"] # nolint
+    pkg_version <- deps[d, "Version"] # nolint
     # Get license
     license <- deps[d, "License"]
     # Flag if regex is matched, otherwise do not
-    if (stringr::str_detect(license, args$r)) {
+    if (str_detect(license, args$r)) {
       fail_counter <- fail_counter + 1
       cli_alert_warning(glue("{pkg_name} | {pkg_version} | {license}"))
     } else {
       cli_alert_info(glue("{pkg_name} | {pkg_version} | {license}"))
     }
   }
+  # Print summary
+  cli_h1("License Summary")
+  summary_table <- as.data.frame(table(deps$License))
+  summary_table <- setNames(summary_table, c("License", "Count"))
+  print.data.frame(summary_table, row.names = FALSE)
   # Force fail if set
   if (args$f) {
     if (fail_counter > 0) {
