@@ -30,81 +30,11 @@ jobs:
       shell: bash
     
     - name: Create Release ${{ github.ref }} 🚀
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
+        token:  ${{ secrets.GITHUB_TOKEN }} 
+        tag: ${{ github.ref }}
+        name: Release ${{ github.ref }}
         body: ${{ env.TAG_MESSAGE }}
         draft: false
         prerelease: false
-
-    - name: Delete latest tag 👊
-      uses: dev-drprasad/delete-tag-and-release@v0.2.0
-      with:
-        delete_release: false
-        tag_name: latest
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Create latest tag by git 📌
-      run: |
-        git config --global user.email "68416928+insights-engineering-bot@users.noreply.github.com" 
-        git config --global user.name "insights-engineering-bot"
-        git config --list
-        git fetch --all --tags -f
-        git tag -fa latest -m "[ci skip] auto updated after tagging to '${GITHUB_REF#refs/*/}'"
-        git push origin latest
-    
-    - name: Update major tag ☝
-      run: |
-        RE='[^0-9]*\([0-9]*\)[.]\([0-9]*\)[.]\([0-9]*\)\([0-9A-Za-z-]*\)'
-        if [ -n "$(sed -n "/$RE/p" <<< "${{ github.ref }}")" ]; then
-          #MAJOR
-          MAJOR=$(sed -e "s/$RE/\1/" <<< "${{ github.ref }}")
-          #MINOR
-          MINOR=$(sed -e "s/$RE/\2/" <<< "${{ github.ref }}")
-          #PATCH
-          PATCH=$(sed -e "s/$RE/\3/" <<< "${{ github.ref }}")
-          #SPECIAL
-          SPECIAL=$(sed -e "s/$RE/\4/" <<< "$TAG")
-          git tag -fa v$MAJOR -m "[ci skip] auto updated after tagging to '${GITHUB_REF#refs/*/}'"
-          echo "MAJOR_VER=${MAJOR}"
-          echo "MAJOR_VER=${MAJOR}" >> $GITHUB_ENV
-        else
-          echo "Tag: '${{ github.ref }}' is not valid semantic versioning 👎"
-        fi
-      shell: bash
-
-    - name: Delete MAJOR tag 👊
-      if: ${{ env.MAJOR_VER }}
-      uses: dev-drprasad/delete-tag-and-release@v0.2.0
-      with:
-        delete_release: false
-        tag_name: v${{ env.MAJOR_VER }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
-    - name: Push major tag ❁
-      if: ${{ env.MAJOR_VER }}
-      run: git push origin v${{ env.MAJOR_VER }}
-
-    # - name: Install package jq
-    #   run: |
-    #     sudo apt-get -y install jq
-    #     jq --version
-
-    # - name: Create latest tag
-    #   run: |
-    #     # Create TAG_OBJECT by GitHub API
-    #     TAG_OBJECT=$(curl -fsS -X POST -H "Accept: application/vnd.github.v3+json"\
-    #       -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-    #       https://api.github.com/repos/${{ github.repository }}/git/tags \
-    #       -d '{"tag":"latest","message":"${{ env.TAG_MESSAGE }}","object":"${{ github.sha }}","type":"commit"}' | jq -r .sha)
-    #     echo "Object TAG sha='$TAG_OBJECT'"
-    #     # Create tag reference by GitHub API
-    #     curl -vf -X POST -H "Accept: application/vnd.github.v3+json" \
-    #       -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-    #       https://api.github.com/repos/${{ github.repository }}/git/refs \
-    #       -d '{"ref":"refs/tags/latest","sha":"'$TAG_OBJECT'"}'
