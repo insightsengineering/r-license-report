@@ -1,0 +1,40 @@
+---
+name: Release on tag ⬆
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_PAT: ${{ secrets.REPO_GITHUB_TOKEN }}
+    permissions:
+      contents: write
+      packages: write
+      deployments: write
+    steps:
+    - name: Checkout code 🛎
+      uses: actions/checkout@v2      
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Get body from tag msg 🔍
+      run: |
+        # set TAG_MESSAGE
+        COMMIT_MESSAGE=$(git log --format=%B -n 1 ${{ github.ref }})
+        TAG_MESSAGE=$(git tag -l --format='%(contents:subject)' ${{ github.ref }})
+        echo "TAG_MESSAGE=${TAG_MESSAGE}" >> $GITHUB_ENV
+      shell: bash
+    
+    - name: Create Release ${{ github.ref }} 🚀
+      uses: ncipollo/release-action@v1
+      with:
+        token:  ${{ secrets.GITHUB_TOKEN }} 
+        tag: ${{ github.ref }}
+        name: Release ${{ github.ref }}
+        body: ${{ env.TAG_MESSAGE }}
+        draft: false
+        prerelease: false
