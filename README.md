@@ -144,6 +144,9 @@ jobs:
           path: license-report.pdf
 ```
 
+An example of the output of the action can be seen below:
+![Screenshot with example output](example.png)
+
 ## Standalone Usage
 
 The underlying script used in this action can also be used as a standalone script, and can be used outside of this action (eg. in other CI/CD tools). Simply:
