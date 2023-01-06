@@ -51,7 +51,7 @@ get_licenses <- function(dir = ".",
   # Set values
   fields_to_read <- c("Package", "Version", "License")
   rspm_url <-
-    glue("https://packagemanager.rstudio.com/cran/{snapshot}/src/contrib")
+    glue("https://packagemanager.posit.co/cran/{snapshot}/src/contrib")
   bioc_home <-
     glue("https://www.bioconductor.org/packages/{bioc_release}/")
   bioc_packages_path <- "/src/contrib/PACKAGES"
@@ -140,6 +140,11 @@ Options:
 
 ## Get licenses for all dependencies
 main <- function() {
+  # Setting up the repos from CRAN variable
+  r <- getOption("repos")
+  r["CRAN"] <- Sys.getenv("CRAN", "https://packagemanager.posit.co/cran/latest")
+  options(repos=r)
+
   # Parse args
   args <- parse_arguments()
   # Set snapshot
