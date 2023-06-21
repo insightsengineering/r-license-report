@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repo 🛎
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: License report for Aragog 🕷
         uses: ./
@@ -29,7 +29,7 @@ jobs:
 
     steps:
       - name: Checkout repo 🛎
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: License report for Buckbeak (With HTML = ${{ matrix.as_html }}) 🦄
         uses: ./
